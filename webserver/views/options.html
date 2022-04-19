@@ -1,0 +1,26 @@
+{{##def.page_title = 'Admin - Options' #}}
+{{##def.content:
+<form action="/logout" method="post" id='logout'></form>
+<div class="content row panel radius">
+    <script>
+        
+    </script>
+    <div class="settings">
+        {{#def.include('./admin_side_bar')}}
+        <div class="small-10 columns sets-content">
+            <h5>Options</h5>
+            <hr>
+            <form method='POST' action='/admin/options'>
+                {{~it.options :option:index}}
+                <p class="account">
+                    <b>{{=option.description}}</b>
+                    <input type="text" name="{{=option.name}}" value="{{=option.value}}">
+                </p>
+                {{~}}
+                <input class="button right" type='submit' value='Update'/>
+            </form>
+        </div>
+    </div>
+</div>
+#}}
+{{#def.include('./template/main_new')}}

@@ -1,0 +1,187 @@
+/* Overlay style */
+.overlay2 {
+	position: fixed;
+	width: 800px;
+	height: 100%;
+	top: 0;
+	left: 283px;
+	background: rgba(12, 21, 38, 0.9);
+	z-index: 200;
+}
+
+/* Overlay closing cross */
+.overlay2 .overlay-close {
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	overflow: hidden;
+	border: none;
+	background: url(../img/cross.png) no-repeat center center;
+	text-indent: 200%;
+	color: transparent;
+	outline: none;
+	z-index: 100;
+}
+
+/* Menu style */
+.overlay2 .mynum_area {
+	/*text-align: center;*/
+	position: relative;
+	/*top: 50%;*/
+	/*height: 60%;*/
+	-webkit-transform: translateY(-20%);
+	transform: translateY(-10%);
+}
+
+.overlay2 ul {
+	list-style: none;
+	padding: 0;
+	margin: 0 auto;
+	display: inline-block;
+	height: 100%;
+	position: relative;
+}
+
+.overlay2 ul li {
+	display: block;
+	height: 20%;
+	height: calc(100% / 5);
+	min-height: 54px;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.overlay2 ul li a {
+	font-size: 54px;
+	font-weight: 300;
+	display: block;
+	color: #fff;
+	-webkit-transition: color 0.2s;
+	transition: color 0.2s;
+}
+
+.overlay2 ul li a:hover,
+.overlay2 ul li a:focus {
+	color: #f0f0f0;
+}
+
+/* Effects */
+.overlay-cornershape {
+	background: transparent;
+	visibility: hidden;
+	-webkit-transition: visibility 0s 0.5s;
+	transition: visibility 0s 0.5s;
+}
+
+.overlay-cornershape.open {
+	visibility: visible;
+	-webkit-transition: none;
+	transition: none;
+}
+
+.overlay-cornershape svg {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.overlay-cornershape .overlay-path {
+	fill: rgb(7 28 41 / 97%);
+}
+
+.overlay-cornershape .mynum_area,
+.overlay-cornershape .overlay-close {
+	opacity: 0;
+	-webkit-transition: opacity 0.4s 0.4s;
+	transition: opacity 0.4s 0.4s;
+}
+
+.overlay-cornershape.open .mynum_area,
+.overlay-cornershape.open .overlay-close {
+	opacity: 1;
+	-webkit-transition-delay: 0.4s;
+	transition-delay: 0.4s;
+}
+
+.overlay-cornershape.close .mynum_area,
+.overlay-cornershape.close .overlay-close {
+	-webkit-transition-delay: 0s;
+	transition-delay: 0s;
+}
+
+@media screen and (max-height: 30.5em) {
+	.overlay2 .mynum_area {
+		height: 70%;
+		font-size: 34px;
+	}
+	.overlay2 ul li {
+		min-height: 34px;
+	}
+}
+.mynum_content{
+	margin-top: 72px;
+	/*border:1px solid #ccc;*/
+    padding: 10px;
+}
+.mynum_content h3{
+	font-size: 16px;
+    color: #fff;
+    font-weight: 700;
+}
+.mynum_content p{
+	font-size:13px;
+	color:#313b7f;
+}
+.num_list>*{
+	width: 16.66%;
+    padding-bottom: 10px;
+    padding-left: 9px;
+    /* position: relative; */
+    -ms-flex-item-align: stretch;
+    align-self: stretch;
+}
+.num_list{
+	margin-left: -9px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.lotto_blue, .lotto_purple {
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    height: 42px;
+    background:#00172c;
+}
+.lotto_blue>div, .lotto_purple>div {
+    height: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    /*border-top: 1px solid #ebebeb;*/
+    -ms-flex-direction: column;
+    flex-direction: column;
+    border-radius: 8px;
+    font-weight: 700;
+    color: #fff;
+    font-size: 14px;
+}
+.sett>button{
+	background: #013972; /* Old browsers */
+background: -moz-linear-gradient(top, #013972 0%, #11dbf3 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #013972 0%,#11dbf3 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #013972 0%,#11dbf3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#013972', endColorstr='#11dbf3',GradientType=0 ); /* IE6-9 */
+width:100%;
+}

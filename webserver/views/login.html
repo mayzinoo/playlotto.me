@@ -1,0 +1,137 @@
+{{##def.page_title = 'Login' #}}
+
+{{##def.content:
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+	var submitEnabled = true;
+  function enableSubmit() {
+	  submitEnabled = true;
+    var s = document.getElementById('loginSubmit');
+    s.style.display = 'block';
+  }
+</script>
+<style type="text/css">
+    .bg-overlay {
+  position: fixed;
+  z-index: 998;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.bg-overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.subscribe-optin {
+  position: relative;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 25%;
+  height: 23%;
+  padding-left:40px;
+  padding: 80px;
+  background: #17a2b8;
+  font-size: 12px !important;
+  overflow-y: auto;
+  border: 1px solid #3f4356;
+  border-radius: 3px;
+}
+.subscribe-optin .login_form{
+  padding: 5rem;
+}
+.subscribe-optin .register_form{
+  padding: 12px 35px;
+}
+.subscribe-optin .register_form h5{
+  font-size:18px !Important;
+  margin: 64px 0px 0px 46px;
+}
+.subscribe-optin h2 {
+  padding: 1rem 0;
+}
+.subscribe-optin .optin-close {
+  position: absolute;
+  top: 5px !important;
+  right: 1rem;
+  z-index: 999;
+  color: #fff;
+  font-size: 2.5rem;
+  text-decoration: none;
+}
+.subscribe-optin .optin-close:hover {
+  color: #c7c7c7;
+  transition: color 500ms ease;
+}
+</style>
+
+<div class="login-container">
+    <div id="output"></div>
+    <!-- <div class="avatar"></div> -->
+    <img src="../img/ballMachineBackground2.jpg" class="avatar">
+    <div class="form-box">
+        <form action="/login" method="post" onsubmit="return submitEnabled;">
+            <input id="username" name="username" value="{{?it.values}}{{!it.values.name}}{{?}}" type="text" placeholder="User ID" required>
+            <input id="password" value="{{?it.values}}{{!it.values.password}}{{?}}" name="password" type="password" placeholder="Password" required>
+            <button class="btn btn-info btn-block login" type="submit" name="login">Login</button>
+        </form>
+    </div>
+</div>
+
+<div class="bg-overlay" id="nouser">
+                <div class="subscribe-optin">                    
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <label><h4>Username does not exist.</h4></label>
+                            </div>
+                        </div>                     
+                   
+                    <a href="#" class="optin-close">&times;</a>
+                </div>
+        </div> <!-- end -->
+            <div class="bg-overlay" id="userisblocked">
+                <div class="subscribe-optin">                    
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <label><h4>USER_IS_BLOCKED.</h4></label>
+                            </div>
+                        </div>                       
+                   
+                    <a href="#" class="optin-close">&times;</a>
+                </div>
+            </div>
+            <div class="bg-overlay" id="nouserorpass">
+                <div class="subscribe-optin">                    
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <label><h4>NO_USER.</h4></label>
+                            </div>
+                        </div>                       
+                   
+                    <a href="#" class="optin-close">&times;</a>
+                </div>
+            </div>
+            <div class="bg-overlay" id="wrongpassword">
+                <div class="subscribe-optin">                    
+                        <div class="row">
+                            <div class="large-6 columns">
+                                <label><h5>Invalid password.</h5></label>
+                            </div>
+                        </div>                       
+                   
+                    <a href="#" class="optin-close">&times;</a>
+                </div>
+            </div> <!-- end -->
+
+
+#}}
+{{#def.include('./template/main_old')}}

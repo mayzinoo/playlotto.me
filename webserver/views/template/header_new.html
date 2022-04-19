@@ -1,0 +1,68 @@
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script>
+    var submitEnabled = true;
+  function enableSubmit() {
+      submitEnabled = true;
+    var s = document.getElementById('loginSubmit');
+    s.style.display = 'block';
+  }
+</script>
+<script type="text/javascript">
+        var submitEnabled = true;
+        function enableSubmit() {
+            submitEnabled = true;
+      var s = document.getElementById('registerSubmit');
+      s.style.display = 'block';
+    }
+
+    window.onload = function () {
+        if (document.getElementById('confirmation') !== null) {
+            document.getElementById('confirmation').onchange = validatePassword;
+            document.getElementById('password').onchange = validatePassword;
+        }
+    };
+    function validatePassword() {
+        var password = document.getElementById('password').value;
+        var confirm = document.getElementById('confirmation').value;
+        if (password != confirm) {
+            document.getElementById('confirmation').setCustomValidity("Confirmation and password should be the same");
+        } else document.getElementById("confirmation").setCustomValidity('');
+    }
+</script>
+
+<script>
+    var submitEnabled = true;
+    function enableSubmit() {
+        submitEnabled = true;
+        var s = document.getElementById('forgotSubmit');
+        s.style.display = 'block';
+    }
+</script>
+<header>
+    <div id="top-bar">
+        <div class="container">
+            <div class="row header_wrapper">
+                <div class="bottom_sm_padding col-md-12 col-lg-12 col-sm-12 header">
+                    <div class="left_header">
+                        <div class="title">
+                            <a href="/"><h1>LuckyBall</h1></a>
+                        </div>
+                    </div>
+                    <div class="right_header">
+                        <div class="user-login">
+                            <div class="balance-bits">
+                                <span class="balance">{{=it.user.username}} : 1000000</span>
+                            </div>
+                            <!-- <div class="burger-btn username">
+                                <a href="/account">
+                                    <i class="fa fa-bars"></i>
+                                </a>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</header>

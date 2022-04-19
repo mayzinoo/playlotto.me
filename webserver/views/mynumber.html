@@ -1,0 +1,218 @@
+{{##def.page_title = 'Your account' #}}
+{{##def.content:
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.8.2.js"></script>
+<style type="text/css">
+#overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: #000;
+filter:alpha(opacity=70);
+-moz-opacity:0.7;
+-khtml-opacity: 0.7;
+opacity: 0.7;
+z-index: 100;
+display: none;
+}
+.cnt223 a{
+text-decoration: none;
+}
+.popup{
+width: 100%;
+margin: 0 auto;
+display: none;
+position: fixed;
+    z-index: 998;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    transition: opacity 500ms;
+}
+.cnt223{
+min-width: 600px;
+width: 600px;
+min-height: 150px;
+margin: 100px auto;
+background: #f3f3f3;
+position: relative;
+z-index: 103;
+padding: 15px 35px;
+border-radius: 5px;
+box-shadow: 0 2px 5px #000;
+}
+.cnt223 p{
+clear: both;
+    color: #555555;
+    /* text-align: justify; */
+    font-size: 20px;
+    font-family: sans-serif;
+}
+.cnt223 p a{
+color: #d91900;
+font-weight: bold;
+}
+.cnt223 .x{
+float: right;
+height: 35px;
+left: 22px;
+position: relative;
+top: -25px;
+width: 34px;
+}
+.cnt223 .x:hover{
+cursor: pointer;
+}
+</style>
+<script type='text/javascript'>
+$(function(){
+var overlay = $('<div id="overlay"></div>');
+overlay.show();
+overlay.appendTo(document.body);
+$('.popup').show();
+$('.close').click(function(){
+$('.popup').hide();
+overlay.appendTo(document.body).remove();
+return false;
+});
+
+});
+</script>
+
+
+<form action="/logout" method="post" id='logout'></form>
+
+<div class="content panel radius">
+ 
+    <div class="row settings">
+        <div class="col-md-6 col-sm-12">
+
+                <!-- Warning Register Start -->
+                    <div class="bg-overlay" id="namewarning">
+                        <div class="subscribe-optin">
+                            <h5>Register Warning</h5>
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <span style="font-size:20px;">Username not valid.</span>
+                                </div>                    
+                            </div>               
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                    <div class="bg-overlay" id="namelengthwarning">
+                        <div class="subscribe-optin">
+                            <h5>Register Warning</h5>
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <span style="font-size:20px;">Username is too long.</span>
+                                </div>                    
+                            </div>               
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                    <div class="bg-overlay" id="passwordwarning">
+                        <div class="subscribe-optin">
+                            <h5>Register Warning</h5>
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <span style="font-size:20px;">Password not valid</span>
+                                </div>                    
+                            </div>               
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                    <div class="bg-overlay" id="donotmatchwarning">
+                        <div class="subscribe-optin">
+                            <h5>Register Warning</h5>
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <span style="font-size:20px;">Password and confirmation did not match.</span>
+                                </div>                    
+                            </div>               
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                    <div class="bg-overlay" id="alreadytakenwarning">
+                        <div class="subscribe-optin">
+                            <h5>Register Warning</h5>
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+                                  <span style="font-size:20px;">User name already taken...</span>
+                                </div>                    
+                            </div>               
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                    <!-- Warning Register End -->
+
+                <div class="popup" id="register">
+                <div class="subscribe-optin">
+                    <div class="register_form">
+                        <form action="/register" method="post" onsubmit="return submitEnabled;">
+                            <div class="row">
+                                <div class="">
+                                    <h5>Create a new account<br/> <small><a href="#login">already have one?</a></small></h5>
+                                    <hr>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 columns input">
+                                        <div class="col-md-3 col-sm-12 col-xs-12 columns">
+                                            <label for="username">Username</label>
+                                        </div>
+                                        <div class="col-md-9 col-sm-12 col-xs-12 columns">
+                                            <input id="username" minlength=4 type="text" name="username" value="{{?it.values}}{{!it.values.name}}{{?}}" autocomplete="off" pattern="[A-Za-z0-9_\-]{3,16}" title="Username only allowed alphanumeric, hyphen and underscore" required class="reg-textbox" />
+                                            <label class="reg-label">4 or more words</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 col-sm-12 col-xs-12 columns input">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12 col-xs-12  columns">
+                                            <label>Password</label>
+                                        </div>
+                                        <div class="col-md-9 col-sm-12 col-xs-12  columns">
+                                            <input id="password" minlength=4 type="password" value="{{?it.values}}{{!it.values.password}}{{?}}" name="password" autocomplete="off"  title="Password should be at least 4 characters" required class="reg-textbox" />
+                                          <label class="reg-label">4 or more words</label>                                          
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 col-xs-12 col-sm-12 columns input">
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12 col-xs-12  col-sm-4 columns">
+                                            <label>Confirm Password</label>
+                                        </div>
+                                        <div class="col-md-9 col-sm-12 col-xs-12  columns">
+                                            <input id="confirm" type="password" value="{{?it.values}}{{!it.values.confirm}}{{?}}" name="confirm" autocomplete="off"  data-equal-id="password" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 columns mid_bottom_padding">
+                                   <!--<div class="g-recaptcha" data-sitekey="{{=it.recaptchaKey}}" data-callback="enableSubmit"></div>-->
+                                    <input id="registerSubmit"  class="border-button blue right" type="submit" value="Register"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <a href="/" class="optin-close">x</a>
+                </div>
+            </div>
+               
+            </div>
+         </div>  
+      </div>
+    </div> 
+
+   
+    </div>
+
+#}}
+{{#def.include('./template/main_new')}}
+

@@ -1,0 +1,57 @@
+{{##def.page_title = 'Tip' #}}
+
+{{##def.content:
+<script type="text/javascript">
+    function logout() {
+        if (document.getElementById('logout') ) {
+            if (confirm("Are you sure you want to log out?")) {
+                document.getElementById("logout").submit();
+            }
+        }
+    }
+</script>
+<form action="/logout" method="post" id='logout'></form>
+<div class="content row panel radius">
+    <div class="settings">
+        {{#def.include('./side_bar')}}
+        <div class="small-10 columns sets-content">
+            <a class="border-button right green" href="/tip-send">Send Tip</a>
+            <h5 >Tip History</h5>
+            <hr>
+            {{?it.user.tips.length > 0}}
+                <table>
+                    <thead>
+                        <tr>
+                            <td>From</td>
+                            <td>To</td>
+                            <td>Amount</td>
+                            <td>Commission</td>
+                            <td class="show-for-large-up">Transaction ID</td>
+                            <td class="show-for-large-up">Date</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{~it.user.tips :tip:index}}
+                            <tr>
+                                <td>{{=tip.sender}}</td>
+                                <td>{{=tip.recipient}}</td>
+                                <td>{{#def.format: {n: tip.amount, decimals: 2 } }}</td>
+                                <td>{{#def.format: {n: tip.commission, decimals: 2 } }}</td>
+                                <td class="show-for-large-up">{{=tip.tipTxId}}</td>
+                                <td class="show-for-large-up">{{=tip.created}}</td>
+                            </tr>
+                        {{~}}
+                    </tbody>
+                </table>
+            {{??}}
+                <br>
+                <br>
+                <br>
+                <p>You have no tip history in your account.</p>
+            {{?}}
+        </div>
+    </div>
+</div>
+
+#}}
+{{#def.include('./template/main_new')}}

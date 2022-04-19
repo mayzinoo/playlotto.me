@@ -1,0 +1,47 @@
+{{##def.page_title = 'Send Tip' #}}
+
+{{##def.content:
+<script type="text/javascript">
+    function logout() {
+        if (document.getElementById('logout') ) {
+            if (confirm("Are you sure you want to log out?")) {
+                document.getElementById("logout").submit();
+            }
+        }
+    }
+</script>
+<form action="/logout" method="post" id='logout'></form>
+<div class="content row panel radius">
+
+    <div class="settings">
+        {{#def.include('./side_bar')}}
+        <div class="small-10 columns sets-content">
+            <h4>Send Tip</h4>
+            <p>You can send the tip as much as you want, to whomever you want.<br/>
+            Tip will be delivered to the designated User ID immediately, and cannot be returned.</br>
+            Recheck before submit.</p>
+            <form action="/tip-send" method="post">
+                <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                <input style="display:none" type="text" name="fakeusernameremembered"/>
+                <input style="display:none" type="password" name="fakepasswordremembered"/>
+
+                <input type="hidden" name="tipTxId" value="{{= it.id}}" />
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" name="amount" placeholder="{{= it.tipFee }}" min="{{= it.tipFee }}" step=".01" required/>
+                <label for="recipient">Recipient User ID</label>
+                <input type="text" id="recipient" name="recipient" required/>
+                <label for="password">Your Password</label>
+                <input type="password" id="password" name="password" autocomplete="off"/>
+                {{?it.user.mfa_secret}}
+                    <label for="otp">2FA Code</label>
+                    <input type="text" id="otp" name="otp" autocomplete="off" pattern="[0-9]{6}" required />
+                {{?}}
+                <a href="/tip" class="border-button ">Back</a>
+                <input class="border-button right blue" type="submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+#}}
+
+{{#def.include('./template/main_new')}}

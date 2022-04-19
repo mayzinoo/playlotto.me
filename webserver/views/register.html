@@ -1,0 +1,50 @@
+{{##def.page_title = 'Register' #}}
+
+{{##def.content:
+<!--<script src='https://www.google.com/recaptcha/api.js'></script>-->
+<script type="text/javascript">
+		var submitEnabled = true;
+		function enableSubmit() {
+			submitEnabled = true;
+      var s = document.getElementById('registerSubmit');
+      s.style.display = 'block';
+    }
+
+    window.onload = function () {
+        if (document.getElementById('confirmation') !== null) {
+            document.getElementById('confirmation').onchange = validatePassword;
+            document.getElementById('password').onchange = validatePassword;
+        }
+    };
+    function validatePassword() {
+        var password = document.getElementById('password').value;
+        var confirm = document.getElementById('confirmation').value;
+        if (password != confirm) {
+            document.getElementById('confirmation').setCustomValidity("Confirmation and password should be the same");
+        } else document.getElementById("confirmation").setCustomValidity('');
+    }
+</script>
+
+<div class="login-container">
+    <div id="output"></div>
+    <!-- <div class="avatar"></div> -->
+    
+    <div class="registerform-box">
+        <h5>Create a new account <small><a href="login">already have one?</a></small></h5>
+        <form action="/register" method="post" onsubmit="return submitEnabled;">
+            <input id="username" type="text" class="form-control" name="user[name]" value="{{?it.values}}{{!it.values.name}}{{?}}" autocomplete="off" pattern="[A-Za-z0-9_\-]{3,16}" title="Username only allowed alphanumeric, hyphen and underscore" required placeholder="Username" />
+
+            <input type="email" class="form-control" id="email" value="{{?it.values}}{{!it.values.email}}{{?}}" placeholder="Recovery Email" name="user[email]" autocomplete="off"/>
+           <!--  <small><b>* Optional</b> although we <b>strongly advise you to use one</b>, otherwise it is <b>not possible</b> to password reset!</small> -->
+
+            <input id="password" class="form-control" type="password" value="{{?it.values}}{{!it.values.password}}{{?}}" name="user[password]" autocomplete="off" pattern=".{7,200}" title="Password should be at least 7 characters" required placeholder="Password" />
+            <!-- <small>Pick something secure, at least 7 characters</small> -->
+
+            <input id="confirmation" class="form-control" type="password" value="{{?it.values}}{{!it.values.confirm}}{{?}}" name="user[confirm]" autocomplete="off" pattern=".{7,200}" data-equal-id="password" required placeholder="Confirm Password" />
+
+            <button class="btn btn-info btn-block register" type="submit" name="login">Register
+    </div>
+</div>
+       
+#}}
+{{#def.include('./template/main_old')}}

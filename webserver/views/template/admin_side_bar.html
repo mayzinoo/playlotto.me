@@ -1,0 +1,25 @@
+<script type="text/javascript">
+    function logout() {
+        if (document.getElementById('logout') ) {
+            if (confirm("Are you sure you want to log out?")) {
+                document.getElementById("logout").submit();
+            }
+        }
+    }
+</script>
+<form action="/logout" method="post" id='logout'></form>
+<div class="small-2 columns">
+    <ul class="menu">
+        <li class="active">
+            <a href="/admin/options">Options</a>
+        </li>
+        <li>
+            <a href="/admin/giveaway">Giveaway</a>
+        </li>
+        <li>
+            <a onclick="logout();">
+                Logout
+            </a>
+        </li>
+    </ul>
+</div>

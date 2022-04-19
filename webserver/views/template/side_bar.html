@@ -1,0 +1,34 @@
+<script type="text/javascript">
+    function logout() {
+        if (document.getElementById('logout') ) {
+            if (confirm("Are you sure you want to log out?")) {
+                document.getElementById("logout").submit();
+            }
+        }
+    }
+</script>
+<form action="/logout" method="post" id='logout'></form>
+<div class="small-2 columns">
+    <ul class="menu">
+       <!--  <li>
+            <a href="/account">Account</a>
+        </li>
+        <li>
+            <a href="/security">Security</a>
+        </li> -->
+        <li class="active">
+            <a href="/deposit">Deposit</a>
+        </li>
+        <li>
+            <a href="/withdraw">Withdraw</a>
+        </li>
+        <li>
+            <a href="/tip">Tip</a>
+        </li>
+        <li>
+            <a onclick="logout();">
+                Logout
+            </a>
+        </li>
+    </ul>
+</div>

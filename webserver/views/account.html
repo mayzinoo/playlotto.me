@@ -1,0 +1,1041 @@
+{{##def.page_title = 'Your account' #}}
+{{##def.content:
+<script type="text/javascript">
+    window.onload = function () {
+        if (document.getElementById('confirmation') !== null) {
+            document.getElementById('confirmation').onchange = validatePassword;
+            document.getElementById('password').onchange = validatePassword;
+        }
+    };
+    function validatePassword() {
+        var password = document.getElementById('password').value;
+        var confirm = document.getElementById('confirmation').value;
+        if (password != confirm) {
+            document.getElementById('confirmation').setCustomValidity("Confirmation and password should be the same");
+        } else document.getElementById("confirmation").setCustomValidity('');
+    }
+    function logout() {
+        if (document.getElementById('logout') ) {
+            if (confirm("Are you sure you want to log out?")) {
+                document.getElementById("logout").submit();
+            }
+        }
+    }
+</script>
+<style type="text/css">
+    @import url("../vendor/bootstrap-4.3.1-dist/css/bootstrap.css"); 
+ @import url("general.css");
+/** The current theme of the page is based on foundation **/
+
+@import url("../vendor/foundation_old/css/foundation.css"); 
+</style>
+<form action="/logout" method="post" id='logout'></form>
+<div class="container">
+    <div class="account-bg contentt row panell radius">
+ 
+    <div class="col-md-12 col-sm-12 col-xs-12 settings">
+    
+        <div class="row">
+            <div class="col-md-6 txt-center">
+                <div class="account">
+                    <div class="box">
+                        <a class=" arrow" href="#account">Account</a>
+                    </div>
+                    <div class="bg-overlay" id="account">
+                        <div class="subscribe-optin">
+                           
+                    <h5 class="dep-header">Account Info</h5>
+                    <div id="statistics" class="row">
+                        <div class="data col-md-6 col-sm-6 col-xs-6">
+                            <p><b>Deposits </b></p>
+                            <p class="info-color">{{#def.format:{n: it.user.depositsSum, decimals:2} }} </p>
+                        </div>
+                        <div class="data col-md-6 col-sm-6 col-xs-6">
+                            <p><b>Withdrawals </b></p>
+                            <p class="info-color">{{#def.format:{n: it.user.withdrawlsSum, decimals:2} }} </p>
+                        </div>
+                       
+                    </div>
+
+                    <br>
+                   
+                            <a href="#" class="optin-close">&times;</a>
+                        </div>
+                    </div>
+                </div><!-- end acccount -->                
+                <div class="deposit">
+                    <div class="box">
+                        <a class="arrow" href="#deposit-popup">Deposit</a>
+                    </div>
+                    <div class="bg-overlay" id="deposit-popup">
+                                <div class="deposit-option">
+                                    <h5 class="dep-header">Deposit History</h5>     
+                                    <a class="border-button right green" href="#depositnew-popup">Request Deposit</a>
+                                                          
+                                
+                                {{?it.user.deposits.length > 0}}
+                                    <div class="tableFixHead">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Lotto</th>
+                                                <th>Transaction</th>
+                                                <th class="show-for-medium-up">Created</th>
+                                                <th>Cancel</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{~it.user.deposits :deposit:index}}
+                                                <tr>                                                    
+                                                    <td>
+                                                        {{?deposit.status == '3'}}
+                                                        {{#def.format: {n: deposit.update_wow, decimals: 2 } }}
+                                                        {{??}}
+                                                        {{#def.format: {n: deposit.amount, decimals: 2 } }}
+                                                        {{?}}
+                                                     </td>   
+                                                    <td>                                                                                                       
+                                                    {{?deposit.ethereum_deposit_txid}}    
+                                                      <a href="https://etherscan.io/tx/{{=deposit.ethereum_deposit_txid}}" target="_blank">View</a>  
+                                                     {{?}}   
+                                                     
+                                                    </td>
+                                                    <td class="show-for-medium-up">{{=deposit.created}}</td>
+                                                    <form action="/cancel-deposit" id="deposit-cancel" name="deposit-cancel" method="post">
+                                                        <td>
+                                                            {{?deposit.status == '0'}}
+                                                            <input type="button" onclick="getdepositConfirmation('{{=deposit.id}}');" name="deposit-cancel" value="Cancel" class="right btn btn-success">                                                                                                    
+                                                            {{??}}
+                                                            {{?deposit.status == '2'}}
+                                                            <input type="button" disabled="disabled"  value="Cancelled" class="right btn btn-secondary">
+                                                            {{??}}
+                                                               <input type="button" disabled="disabled"  value="Success" class="right btn btn-success">
+                                                            {{?}}
+                                                            {{?}}
+
+                                                         <input type="hidden" name="cancel_id" id="cancel_id">
+                                                        </td>
+                                                        <script type="text/javascript">
+                                                            function getdepositConfirmation(cancel_id) {                                                           
+                                                                   var retVal = confirm("Are you sure to cancel ?");
+
+                                                                   if( retVal == true ) {
+                                
+                                                                      document.getElementById('cancel_id').value = cancel_id;                                                
+                                                                      document.getElementById('deposit-cancel').submit();
+                                                                   } else {         
+                                                                                       
+                                                                      return false;
+                                                                   }
+                                                                }
+                                                        </script>
+                                                    </form> 
+                                                </tr>
+                                            {{~}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {{??}}
+                                    <p>You don't have deposits</p>
+                                {{?}}
+                                    <a href="#" class="optin-close">&times;</a>
+                                </div>
+                    </div>
+                </div><!-- end deposit -->
+                <!-- Eth Deposi Success -->
+                <div class="bg-overlay" id="eth-success">
+                    <div class="deposit-option">
+                        
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                              <span>Ethereum Deposit Successfully.<span>
+                            </div>                    
+                        </div>               
+                        <a href="#" class="optin-close">x</a>
+                    </div>
+                </div>
+                <!-- Eth Deposi Success -->
+
+                <div class="bg-overlay" id="successwithdraw">
+                    <div class="deposit-option">
+                        <h5>Withdraw Request Successful</h5>
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                               Successfully Request Withdraw.
+                            </div>                    
+                        </div>                
+                        <a href="#" class="optin-close">x</a>
+                    </div>
+                </div> 
+                <div class="bg-overlay" id="amount-notenough">
+                                <div class="deposit-option">
+                                    <h5>Not enough money.</h5>
+                                    <a href="#" class="optin-close">x</a>                                    
+                                </div>                    
+                </div> 
+
+
+                <div class="bg-overlay" id="depositnew-popup">
+            <div class="deposit-box">
+                <form action="/deposit-request" method="post">
+                <h5 class="dep-header">Deposit Request</h5>
+                <p style="text-align:center;margin-top:15px">ETH</p>
+                <p id="usd" class="dep-equal">1 iten= {{=it.user.itenrate}} USD</p>
+            
+                <div id="dep_eth" class="">
+                    <p class="alllabel">Please Input the amount</p>
+                    <div class="row nopadding padding-left-md">
+                        <div class="col-md-10">
+                            <input type="text" name="ethereum_amt" id="ethereum_amt" class="form-control">
+                        </div>
+                        <div class="col-md-2 margin-top-sm" style="margin-top:14px;">
+                            ETH
+                        </div>
+                    </div>
+                    <div class="row nopadding padding-left-md">
+                        <div class="col-md-10">
+                            <input type="text" name="ethereum_wow_amt" id="ethereum_wow_amt" class="form-control">
+                        </div>
+                        <div class="col-md-2 margin-top-sm" style="margin-top:14px;">
+                            WoW
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 small_top_padding">
+                    <p class="alllabel txt-center"><b>Deposit Address:</b></p>
+                    <div class="row">
+                        <input type="text" class="form-control" name="eth_address" value="{{=it.user.deposit_address}}" readonly>
+                    </div>
+                        <a href="ethereum:{{=it.user.deposit_address}}?message=deposit" class="txt-center">Ethereum link</a>
+                        <a href="https://etherscan.io/address/0x326c2dbb91140Af3D664D5e7C904E1aD9598E902" >Ethereum link</a>
+                    
+                    </div>
+                </div>
+
+                <input type="submit" name="dep-request" value="Submit" class="right border-button blue">
+                <!-- <a href="#admininfo" class="right btn btn-success">Submit</a> -->
+                    
+            </form>
+            <a href="#" class="optin-close">x</a>
+            </div>
+
+            
+        </div>
+                <div class="tip">
+                    <div class="box">
+                        <a class="arrow" href="#tip">Tip</a>
+                    </div>
+                    <div class="bg-overlay" id="tip">
+                                <div class="deposit-option">
+                                    <h5 class="tip-header">Tip History</h5>
+                                    <a class="border-button right green" href="#tip-send">Send Tip</a>
+                                    {{?it.user.tips.length > 0}}    
+                                <div class="tableFixHead">    
+                                 <table>
+                                    <thead>
+                                        <tr>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Amount</th>
+                                            <th>Commission</th>
+                                            <th class="show-for-large-up">Transaction ID</th>
+                                            <th class="show-for-large-up">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{~it.user.tips :tip:index}}
+                                            <tr>
+                                                <td>{{=tip.sender}}</td>
+                                                <td>{{=tip.recipient}}</td>
+                                                <td>{{#def.format: {n: tip.amount, decimals: 2 } }}</td>
+                                                <td>{{#def.format: {n: tip.commission, decimals: 2 } }}</td>
+                                                <td class="show-for-large-up">{{=tip.tipTxId}}</td>
+                                                <td class="show-for-large-up">{{=tip.created}}</td>
+                                            </tr>
+                                        {{~}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {{??}}
+                              <br>
+                            
+                            <p class="alllabel">You have no tip history in your account.</p>
+                            {{?}}
+                                        
+                                                <a href="#" class="optin-close">x</a>
+                                </div>
+                    </div>
+            <!-- Success Tip -->
+                   <div class="tipp">                    
+                        <div class="bg-overlay" id="tip-send-successfully">
+                                <div class="deposit-option">
+                                    <h5 class="tipfontcolor">Tip Sent Successfully.</h5>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div> 
+                        <div class="bg-overlay" id="amount-notenough">
+                                <div class="deposit-option">
+                                    <h5>Not enough money.</h5>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div> 
+                        <div class="bg-overlay" id="no-receipt-user">
+                                <div class="deposit-option">
+                                    <h5>Could not verify the recipient.</h5>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div> 
+            <div class="bg-overlay" id="sender-wrongpass">
+                                <div class="deposit-option">
+                                    <h5>Wrong password. Try it again.....</h5>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div>
+                    </div>
+
+
+                    <div class="tipp">                    
+                        <div class="bg-overlay" id="deposit-send-successfully">
+                                <div class="deposit-option">
+                                    <h4>Deposit Ethereum Sent Successfully.</h4>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div> 
+                    </div> 
+
+                    <div class="tipp">                    
+                        <div class="bg-overlay" id="deposit-send-fail">
+                                <div class="deposit-option">
+                                    <h4>Deposit Ethereum Sent fail. You have no ethereum.</h4>
+                                    <a href="/account" class="optin-close">x</a>                                    
+                                </div>                    
+                        </div> 
+                    </div> 
+                    <div class="bg-overlay" id="tip-send">
+                         <div class="sendtip-box">
+                            <h5 class="dep-header">Send Tip</h5>
+                            <p class="alllabel">You can send the tip at least 10 tips, to whomever you want.<br/>
+                            Tip will be delivered to the designated User ID immediately, and cannot be returned.</br>
+                            Recheck before submit.</p>
+                            <form action="/tip-send" method="post">
+                                <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                                <input style="display:none" type="text" name="fakeusernameremembered"/>
+                                <input style="display:none" type="password" name="fakepasswordremembered"/>
+
+                                <input type="hidden" name="tipTxId" value="{{= it.id}}" />
+                                <label for="amount" class="nomarginlabel">Amount</label>
+                                <input type="text"  id="your_amount" name="your_amount"  placeholder="{{= it.tipFee }}" min="{{= it.tipFee }}"  required/>
+                                <label for="recipient" class="nomarginlabel">Recipient User ID</label>
+                                <input type="text" id="recipient" name="recipient" required/>
+                                <label for="password" class="nomarginlabel">Your Password</label>
+                                <input type="password" id="your_password" name="your_password" autocomplete="off"/>
+                                {{?it.user.mfa_secret}}
+                                    <label for="otp">2FA Code</label>
+                                    <input type="text" id="otp" name="otp" autocomplete="off" pattern="[0-9]{6}" required />
+                                {{?}}
+                                <a href="#tip" class="border-button back-button">Back</a>
+
+                                <script>
+                                    var i = 2;
+                                    $(document).ready(function(){
+                                        $("#your_amount").on("keypress", function(event) {                                           
+                                           var that = $("#your_amount").val();                                           
+                                           if (event.which < 48 || event.which > 57) {
+                                                event.preventDefault();
+                                            } else {
+                                                $(this).val($(this).val().replace(/[^\d].+/, ""));
+                                            }                                            
+                                        });
+                                    });
+                                </script>                               
+
+                               <!--Tip send Button unactive STATUS-->
+
+                                <!--input class="border-button right blue" type="submit" value="submit"/ -->
+
+                                <input class="border-button right blue" type="submit" value="submit">
+
+
+                                <!--Tip send save Button unactive STATUS-->
+                            </form>
+                            <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                </div><!-- end support -->
+            </div>
+            <div class="col-md-6 txt-center">
+                <div class="security">
+                    <div class="box">
+                        <a class="arrow" href="#security">Security</a>
+                    </div>
+                    <div class="bg-overlay" id="security">
+                            <div class="deposit-option">
+                                             
+                                <div class="col-md-12 col-sm-12">
+                                    
+                                                <h5 class="dep-header1">Update Your Password</h5>
+                                                <form action="reset-password" method="post" >
+                                                    <!--<label for="old_password" class="nomarginlabel">Old Password</label>-->
+                        <div class="small_top_padding">
+                                                    <input name="old_password" type="password" id="old_password" class="form-control" placeholder="Current Password" autocomplete="off" required/>
+                                                    {{?it.user.mfa_secret}}
+                                                        <label>2FA Code
+                                                            <input name="otp" type="text" pattern="[0-9]{6}" required />
+                                                        </label>
+                                                    {{?}}
+                        </div>
+                                                    <!--<label for="password" class="nomarginlabel">New Password <span class="small">At least 4 characters</span></label>-->
+                        <div class="small_top_padding">
+                                                    <input name="password" type="password" class="form-control" placeholder="New Password"  minlength="4" id="new_password"  required/>
+                        </div>
+                                                    <!--<label for="confirmation" class="nomarginlabel">Confirm Password</label>-->
+                        <div class="small_top_padding">
+                                                    <input name="confirmation" type="password" class="form-control" placeholder="Confirm Password" id="confirmation"  required/>                     
+                        </div>
+                                                    <!--Password change save Button unactive STATUS-->
+                        <div class="small_top_padding">
+                                                    <input type="submit" class="border-button blue right default-btn" value="Change">
+                        </div>
+
+                                                    <!--Password change save Button unactive STATUS-->
+
+
+                                                </form>
+                                        
+                                        </div>
+                                <a href="#" class="optin-close">&times;</a>
+                            </div>
+                    </div>
+                </div><!-- end security -->
+        <div class="bg-overlay" id="old-pass-error">
+                        <div class="deposit-option">
+                           
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  Enter your old password.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <div class="bg-overlay" id="new-pass-error">
+                        <div class="deposit-option">
+                           
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  New password is not valid.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <div class="bg-overlay" id="same-error">
+                        <div class="deposit-option">
+                            
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  New password and confirmation should be the same.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <div class="bg-overlay" id="change-error">
+                        <div class="deposit-option">
+                        
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  Unable to change your password.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <div class="bg-overlay" id="wrong-password">
+                        <div class="deposit-option">
+                            
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  Your old password is wrong.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <div class="bg-overlay" id="change-success">
+                        <div class="deposit-option">
+                           
+                            <div class="col-md-12">
+                                <div class="col-md-12 popupclass">
+                                  Password changed successfully.
+                                </div>                    
+                            </div>               
+                            <a href="/account" class="optin-close">x</a>
+                        </div>
+                </div>
+                <!-- end security -->
+                <div class="withdraw">
+                    <div class="box">
+                        <a class="arrow" href="#withdraw">Withdraw</a>
+                    </div>
+                    <div class="bg-overlay" id="withdraw">
+                                <div class="deposit-option">
+                                    <h5 class="dep-header">Withdraw History</h5>
+                                    <a class="border-button right green" href="#widthdraw-request">Request Withdraw</a>
+                            
+                                        {{?it.user.withdrawals.length > 0}}
+                <div class="tableFixHead">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td>Lotto</td>
+                        <td>Currency</td>
+                                            <td>Destination</td>
+                                            <td>Status</td>
+                                            <td class="show-for-large-up">Created</td>
+                        <th>Cancel</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       {{~it.user.withdrawals :withdrawal:index}}
+                                            <tr>
+                                                <td>{{=withdrawal.amount}}</td>
+                                                <td>{{=withdrawal.currency_type}}</td>
+                                                <td>
+                                                    <!-- <a href="https://etherscan.io/tx/{{=withdrawal.ethereum_withdrawal_txid}}"  target="_blank">Link</a> -->
+                                                    <a href="/withdraw-info/{{=withdrawal.id}}">Link</a>
+                                                </td>
+                                                <td>
+                                                    {{?withdrawal.status == '1'}}
+                                                    Confirmed
+                                                    {{??}}
+                                                    {{?withdrawal.status == '0'}}
+                                                    In Progress
+                                                    {{??}}
+                                                    Cancelled
+                                                    {{?}}
+                                                    {{?}}                                                     
+                                                </td>
+                                                <td class="show-for-large-up">{{=withdrawal.created}}</td>
+                                                <form action="/cancel-withdraw" id="withdraw-cancel" name="withdraw-cancel" method="post">
+                                                <td>
+                                                    {{?withdrawal.status == '0'}}
+                                                    <input type="button" onclick="getConfirmation('{{=withdrawal.id}}');" name="withdraw-cancel" value="Cancel" class="right border-btn-cancel">
+                                                    {{??}}
+                                                    {{?withdrawal.status == '2'}}
+                                                    <input type="button" disabled="disabled"  value="Cancelled" class="right btn btn-secondary">
+                                                    {{??}}
+                                                       <input type="button" disabled="disabled"  value="Success" class="right border-btn-succ">
+                                                    {{?}}
+                                                    {{?}}
+                                
+                                                 <input type="hidden" name="forcancel" id="forcancel">
+                                                </td>
+                                                <script type="text/javascript">
+                                                    function getConfirmation(cc) {                                                           
+                                                           var retVal = confirm("Are you sure to cancel ?");
+                                                                                                                 
+                                                           if( retVal == true ) {
+                                                              document.getElementById('forcancel').value = cc;                                                
+                                                              document.getElementById('withdraw-cancel').submit();
+                                                              
+                                                           } else {                                                              
+                                                              return false;
+                                                           }
+                                                        }
+                                                </script>
+                                                </form>    
+                                            </tr>
+                                        {{~}}
+                                    </tbody>
+                                </table>
+                </div>
+                            {{??}}
+                                <!--<br>
+                                <br>
+                    <br>-->
+                                <p>You have no withdrawals in your account.</p>
+                            {{?}}
+                                    <a href="#" class="optin-close">&times;</a>
+                                </div>
+                    </div>
+                    <div class="bg-overlay" id="widthdraw-request">
+                        <div class="deposit-box">
+                         <form action="/new-withdraw-request" method="post">
+                            <h5 class="dep-header">Withdrawal Request</h5>  
+                             <p style="text-align:center;margin-top:15px">ETH</p> 
+                             <div id="with_eth" class="mid_padding">
+                                <label class="nomarginlabel">Please input the amount</label>
+                                <input type="text" name="eth_amount" id="eth_amount" class="form-control" placeholder="wow">
+                                <span name="eth_with_amt" id="eth_with_amt"></span><input type="hidden" name="eth_change_value" id="eth_change_value">
+
+                                <p class="nomarginlabel">Please input the Ethereum Address</p>
+                                <input type="text" name="eth_etherum_address" class="form-control">         
+                            </div> 
+                        <input type="hidden" name="withdrawal_id" value="{{= it.id}}" />
+                        <input type="submit" class="right border-button blue" value="Submit">
+                        </form>
+                         <a href="#" class="optin-close">x</a>
+                        </div>
+                    </div>
+                </div><!-- end withdraw -->
+                <div class="support">
+                    <div class="box">
+                        <a class=" arrow" href="/howtoplay">How to Play</a>
+                    </div>
+                    <div class="bg-overlay" id="support">
+                                <div class="subscribe-optin">
+                                    <h5>Need help? please contact us</h5>
+                                
+                                <div class="row contact">
+                                <div class="col-md-12">
+                                    <form action="/support" id="contact" method="post">
+
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" value="{{!it.user.email}}" required=""/>
+
+
+
+                                        <label for="message">Message</label>
+                                        <textarea rows="10" id="message" name="message" required> </textarea>
+                                        <input type="submit" class="border-button right blue" value="Send!"/>
+                                    </form>
+                                </div>
+                                </div>
+                                    <a href="#" class="optin-close">&times;</a>
+                                </div>
+                    </div>
+                </div><!-- end support -->
+               
+            </div>
+         </div>  
+         <div class="row acct-set">
+                <div class="col-md-5 txt-center">
+                <div class="play btn-hover color-9">
+                    <div class="box">
+                        <a hreff="/" class="logout-btn">
+                            Play
+                        </a>
+                    </div>
+                </div><!-- end logout -->
+             </div>
+             <div class="col-md-5 txt-center">
+                <div class="logout btn-hover color-9">
+                    <div class="box">
+                        <a onclick="logout();" class="logout-btn">
+                            Logout
+                        </a>
+                    </div>
+                </div><!-- end logout -->
+            </div>
+         </div>
+     
+
+    </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+   $(document).ready(function () {    
+    $('input[type="radio"][name="currency_type"]').change(function() {            
+            var inputValue = $(this).attr("value");            
+            if(inputValue == 'ETH'){
+                $('#dep_eth').show();        
+                $('#dep_usd').hide();
+                $('#dep_krw').hide();
+                $('#dep_vnd').hide(); 
+                $('#dep_ctc').hide();
+            }
+            else if(inputValue == 'USD'){
+                $('#dep_usd').show();    
+                $('#dep_eth').hide(); 
+                $('#dep_krw').hide();
+                $('#dep_vnd').hide();  
+                $('#dep_ctc').hide();
+            }
+            else if(inputValue == 'KRW'){
+                $('#dep_krw').show();        
+                $('#dep_eth').hide();
+                $('#dep_usd').hide();
+                $('#dep_vnd').hide(); 
+                $('#dep_ctc').hide();  
+            }
+            else if(inputValue == 'VND'){
+                $('#dep_vnd').show();         
+                $('#dep_eth').hide(); 
+                $('#dep_usd').hide();
+                $('#dep_krw').hide(); 
+                $('#dep_ctc').hide(); 
+            }
+            else if(inputValue == 'CTC'){
+                $('#dep_ctc').show();         
+                $('#dep_eth').hide(); 
+                $('#dep_usd').hide();
+                $('#dep_krw').hide(); 
+                $('#dep_vnd').hide(); 
+            }
+            else{}
+            
+    }); 
+
+    $('input[type="radio"][name="withdraw_currency"]').change(function() {
+            var inputValue = $(this).attr("value");            
+            if(inputValue == 'ETH'){
+                $('#with_eth').show();        
+                $('#with_usd').hide();
+                $('#with_krw').hide();
+                $('#with_vnd').hide(); 
+                $('#with_ctc').hide(); 
+            }
+            else if(inputValue == 'USD'){
+                $('#with_usd').show();        
+                $('#with_eth').hide(); 
+                $('#with_krw').hide();
+                $('#with_vnd').hide();
+                $('#with_ctc').hide();  
+            }
+            else if(inputValue == 'KRW'){
+                $('#with_krw').show();        
+                $('#with_eth').hide();
+                $('#with_usd').hide();
+                $('#with_vnd').hide(); 
+                $('#with_ctc').hide();  
+            }
+            else if(inputValue == 'VND'){
+                $('#with_vnd').show();        
+                $('#with_eth').hide(); 
+                $('#with_usd').hide();
+                $('#with_krw').hide(); 
+                $('#with_ctc').hide(); 
+            }
+            else if(inputValue == 'CTC'){
+                $('#with_ctc').show();        
+                $('#with_eth').hide(); 
+                $('#with_usd').hide();
+                $('#with_krw').hide(); 
+                $('#with_vnd').hide(); 
+            }
+            else{}
+            
+    }); 
+
+   $.ajax({
+                type: 'GET',
+                url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                success: function(data){
+                
+                 document.getElementById("usd").innerHTML=("1 wow ="+(data.result.ethusd/100000).toFixed(5)+" USD");
+                
+               }
+            });
+
+    $('.currencychange').keyup(function () {
+
+        $.ajax({
+                  type: 'GET',
+                  url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                  success: function(data){
+                                  
+                  var num1 = $('#usdamt').val();
+                  
+                  var num2=(data.result.ethusd/100000).toFixed(5);
+                  
+                  var result=parseInt(num1/num2);
+                  
+                  $('#wowamt').val(result);
+                    
+                  
+                 }
+              });
+        
+     });
+      setInterval(function() {  
+                    changenum()
+                   
+                    }, 600000);
+});
+   function changenum(){
+            $.ajax({
+                type: 'GET',
+                url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                success: function(data){
+               
+                document.getElementById("usd").innerHTML=("1 wow ="+(data.result.ethusd/100000).toFixed(5)+ " USD");               
+
+               }
+            });
+   }
+
+   $('.krwchange').keyup(function () {
+        $.ajax({
+                type: 'GET',
+                url : 'https://openexchangerates.org/api/latest.json?app_id=a498071e2aa94e6eb3f2024ee5737dfe',
+                success: function(data){
+                var usd_change =  data.rates.KRW;
+                
+                var usd_value  =  $('#krwamt').val() / usd_change;                
+                    $.ajax({
+                      type: 'GET',
+                      url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                      success: function(data){
+                                      
+                      var num1 = usd_value;
+                      
+                      var num2=(data.result.ethusd/100000).toFixed(5);
+                      
+                      var result=parseInt(num1/num2);
+                      
+                      $('#krw_wow_amt').val(result);                       
+                      
+                     }
+                  });
+
+                  setInterval(function() {  
+                    changenum()
+                   
+                    }, 600000);                 
+               },
+               error: function(err){
+                console.log(err);
+               }
+            });
+     });
+
+   $('.vndchange').keyup(function () {
+        $.ajax({
+                type: 'GET',
+                url : 'https://openexchangerates.org/api/latest.json?app_id=a498071e2aa94e6eb3f2024ee5737dfe',
+                success: function(data){
+                var usd_change =  data.rates.VND; 
+                var usd_value  =  $('#vndamt').val() / usd_change;                
+
+                    $.ajax({
+                      type: 'GET',
+                      url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                      success: function(data){
+                                      
+                      var num1 = usd_value;
+                      
+                      var num2=(data.result.ethusd/100000).toFixed(5);
+                      
+                      var result=parseInt(num1/num2);
+                      
+                      $('#vnd_wow_amt').val(result);
+                        
+                      
+                     }
+                  });
+
+                  setInterval(function() {  
+                    changenum()
+                   
+                    }, 600000);                 
+               }
+            });
+     });
+
+   $('#ethereum_amt').keyup(function () {
+        var eth_amt = $('#ethereum_amt').val();
+        $.ajax({
+                  type: 'GET',
+                  url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                  success: function(data){                                  
+                  var num1 = eth_amt;
+                  var num2 = parseInt(num1*data.result.ethusd); 
+                  var num3= ((data.result.ethusd) / 100000).toFixed(5); 
+                  var num4=  parseInt(num2/num3);  
+                           
+                  var new_num4 = eth_amt*100000;                            
+                  $('#ethereum_wow_amt').val(new_num4);                    
+                 }
+        });                     
+
+     });
+
+   $('.ctcchange').keyup(function () {
+        $.ajax({
+                type: 'GET',
+                url : 'https://api.exchangerate-api.com/v4/latest/USD',
+                success: function(data){
+                var usd_value  =  $('#ctc_amt').val() * 0.066;                     
+                    $.ajax({
+                      type: 'GET',
+                      url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+                      success: function(data){                                      
+                      var num1 = usd_value;                                           
+                      var num2=(data.result.ethusd/100000).toFixed(5);                      
+                      var result=parseInt(num1/num2);                      
+                      $('#ctc_wow_amt').val(result);  
+                      var eth_value = (usd_value/data.result.ethusd).toFixed(5);                      
+                      $('#eth_ctc').val(eth_value);                    
+                      
+                     }
+                  });
+
+                  setInterval(function() {  
+                    changenum()
+                   
+                    }, 600000);                 
+               },
+               error: function(err){
+                alert('derrd');
+               }
+            });
+     });
+
+   
+   $('#usd_amount').keyup(function () {       
+    var usd_value = $('#usd_amount').val();
+        $.ajax({
+          type: 'GET',
+          url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+          success: function(data){                          
+          var num1 = usd_value;          
+          var num2=(data.result.ethusd/100000).toFixed(5);
+          var res =    (num1*num2).toFixed(2) ;       
+          var result = (num1*num2).toFixed(2) + '  USD';          
+          $('#usd_with_amt').text(result);           
+          $('#usd_change_value').val(res);
+         }
+      });
+
+      setInterval(function() {  
+        changenum()
+       
+        }, 600000);           
+     });
+
+   $('#krw_amount').keyup(function () {
+       var wow_value = $('#krw_amount').val(); 
+
+        $.ajax({
+          type: 'GET',
+          url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+          success: function(data){
+                          
+          var num1 = wow_value;
+          
+          var num2=(data.result.ethusd/100000).toFixed(5);
+          
+          var result=parseInt(num1*num2);
+          
+          $.ajax({
+                type: 'GET',
+                url : 'https://openexchangerates.org/api/latest.json?app_id=a498071e2aa94e6eb3f2024ee5737dfe',
+                success: function(data){
+                var usd_change =  data.rates.KRW; 
+                var krw_value  =  result * usd_change;
+                var krw_text =   result * usd_change + ' KRW';              
+                $('#krw_with_amt').text(krw_text);
+                $('#krw_change_value').val(krw_value);
+            }
+        });         
+          
+         }
+      });
+
+      setInterval(function() {  
+        changenum()
+       
+        }, 600000);                 
+               
+     });
+
+  $('#vnd_amount').keyup(function () {
+       var wow_value = $('#vnd_amount').val(); 
+
+        $.ajax({
+          type: 'GET',
+          url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+          success: function(data){
+                          
+          var num1 = wow_value;
+          
+          var num2=(data.result.ethusd/100000).toFixed(5);
+          
+          var result=parseInt(num1*num2);
+          
+          $.ajax({
+                type: 'GET',
+                url : 'https://openexchangerates.org/api/latest.json?app_id=a498071e2aa94e6eb3f2024ee5737dfe',
+                success: function(data){
+                var usd_change =  data.rates.VND; 
+                var vnd_value  =  result * usd_change;
+                var vnd_text =   result * usd_change + ' VND';
+                
+                $('#vnd_with_amt').text(vnd_text);
+                $('#vnd_change_value').val(vnd_value);
+            }
+        });         
+          
+         }
+      });
+
+      setInterval(function() {  
+        changenum()
+       
+        }, 600000);                 
+               
+     });
+
+  $('#ctc_amount').keyup(function () {
+       var wow_value = $('#ctc_amount').val(); 
+
+        $.ajax({
+          type: 'GET',
+          url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+          success: function(data){
+                          
+          var num1 = wow_value;          
+          var num2=(data.result.ethusd/100000).toFixed(5);          
+          var result=parseInt(num1*num2);
+          
+          var usd_change =  6.6; 
+          var ctc_value  =  result * usd_change;
+          var ctc_text =   result * usd_change + ' CTC';
+        
+          $('#ctc_with_amt').text(ctc_text);
+          $('#ctc_change_value').val(ctc_value);           
+         }
+      });
+
+      setInterval(function() {  
+        changenum()
+       
+        }, 600000);                 
+               
+     });
+
+  $('#eth_amount').keyup(function () {
+       var wow_value = $('#eth_amount').val(); 
+
+        $.ajax({
+          type: 'GET',
+          url : 'https://api.etherscan.io/api?module=stats&action=ethprice&result=ethusd&get=ethusd&apikey=VHT75SBSCA3GTIS5AKPMAC2SAI1M81TIPQ',
+          success: function(data){                          
+          var num1 = wow_value;          
+          var num2=(data.result.ethusd/100000).toFixed(5);                 
+          var result= Math.round(num1*num2); 
+          var rr =  (result/data.result.ethusd).toFixed(4) + ' ETH';
+          var e_val = (result/data.result.ethusd).toFixed(4);
+
+          var new_rr = (wow_value/100000).toFixed(4) + ' ETH';
+          var new_eval =  (wow_value/100000).toFixed(4);      
+          $('#eth_with_amt').text(new_rr);           
+          $('#eth_change_value').val(new_eval);         
+         }
+      });
+
+      setInterval(function() {  
+        changenum()
+       
+        }, 600000);                 
+               
+     });
+
+
+   
+</script>
+#}}
+{{#def.include('./template/main_new')}}

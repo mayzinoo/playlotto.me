@@ -1,0 +1,60 @@
+{{##def.page_title = 'Your Wallet' #}}
+{{##def.content:
+<form action="/logout" method="post" id='logout'></form>
+<div class="content row panel radius">
+
+    <div class="settings">
+        {{#def.include('./side_bar')}}
+        <div class="small-10 columns sets-content">
+            <h5>Deposit</h5>
+            <hr>
+            <p class="account">
+                <h5>Deposit Address:</h5>
+                <input type="text" value="{{=it.user.deposit_address}}" readonly>
+                <a href="ethereum:{{=it.user.deposit_address}}?message=deposit">Ethereum link</a>
+            </p>
+            <div class="row">
+                <div class="large-5 columns">
+                    <img class="show-for-medium-up qr" src="https://blockchain.info/qr?data={{=it.user.deposit_address}}&size=150" alt=""/>
+                </div>
+                <div class="large-6 columns">
+                    Please transfer your ethereum to this address. 
+                    Accounts will be credited after one confirmation. 
+
+                </div>
+            </div>
+            <br>
+            <a class="border-button blue right"href="/user/{{=it.user.username}}">Public Profile</a>
+            <h5>Account Information</h5>
+            <div id="statistics" class="row">
+                <div class="columns data large-3">
+                    <p><b>Deposits </b></p>
+                    <h5>{{#def.format:{n: it.user.deposits, decimals:2} }} ethos</h5>
+                </div>
+                <div class="columns data large-3">
+                    <p><b>Withdrawals </b></p>
+                    <h5>{{#def.format:{n: it.user.withdrawals, decimals:2} }} ethos</h5>
+                </div>
+                <div class="columns data large-3">
+                    <p><b>Free Ethos Collected </b></p>
+                    <h5>{{#def.format:{n: it.user.giveaways, decimals:2} }}</h5>
+                </div>
+                <div class="columns data large-3">
+                    <p><b>Net Profit</b></p>
+                    <h5>{{#def.format:{n: it.user.net_profit, decimals:2} }} ethos</h5>
+                </div>
+            </div>
+
+            <br>
+            {{?typeof it.user.eligible !== 'number' }}
+                {{?it.user.balance > 100}}
+                    <div class="success bits">You are eligible for a free 2 ethos <a href="/request">CLICK HERE TO REQUEST THEM!</a></div>
+                {{?}}
+            {{??}}
+                <div class="success bits">You'll be eligible for 2 free ethos in {{=it.user.eligible}} minutes</div>
+            {{?}}
+        </div>
+    </div>
+    </div>
+#}}
+{{#def.include('./template/main_new')}}
